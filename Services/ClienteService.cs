@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Teste.Data;
 using Teste.Dtos.ClienteDtos;
 using Teste.Models;
-using Teste.Repositories.ClienteRepositories;
 using Teste.ValueObjects;
-using Teste.Wrappers;
+using Teste.HttpResponses;
+using Teste.Data.Repositories.Contracts;
+using Teste.Services.Contracts;
+using Teste.Mappers;
 
-namespace Teste.Services.ClienteServices
+namespace Teste.Services
 {
     public class ClienteService : Notifiable<Notification>, IClienteService
     {
@@ -24,6 +26,13 @@ namespace Teste.Services.ClienteServices
         {
             _clienteRepository = clienteRepository;
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<BasicResponse<BasicObject>> GetNotasFiscais(Guid clienteId)
+        {
+            var notasFiscais = await _clienteRepository.GetNotasFiscais(clienteId);
+            response = new BasicObject("Notas fiscais por cliente", notasFiscais);
+            return new BasicResponse<BasicObject>(response);
         }
 
         public async Task<BasicResponse<BasicObject>> Add(AddClienteDto addClienteDto)
@@ -77,6 +86,21 @@ namespace Teste.Services.ClienteServices
         {
             var clientes = await _clienteRepository.Get();
             response = new BasicObject("Listagem de clientes", clientes);
+            return new BasicResponse<BasicObject>(response);
+        }
+
+        public async Task<BasicResponse<BasicObject>> GetById(Guid clienteId)
+        {
+            var cliente = await _clienteRepository.GetById(clienteId);
+            if(cliente is null)
+            {
+                response = new BasicObject("Cliente não encontrado", null);
+                return new BasicResponse<BasicObject>(response, StatusCodes.Status404NotFound);
+            }
+             
+            var clienteResponse = ClienteMapper.ClienteToGetClienteDto(cliente);
+
+            response = new BasicObject("Cliente", clienteResponse);
             return new BasicResponse<BasicObject>(response);
         }
 

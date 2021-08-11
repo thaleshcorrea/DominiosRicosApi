@@ -1,10 +1,11 @@
 using System;
+using Flunt.Notifications;
+using Teste.Shared;
 
 namespace Teste.Dtos.NotaFiscalDtos
 {
-    public class GetNotaFiscalDto
+    public class SaveNotaFiscalDto : Notifiable<Notification>, IValidatable
     {
-        public Guid Id { get; set; }
         public int Numero { get; set; }
         public int Serie { get; set; }
         public int Modelo { get; set; }
@@ -12,6 +13,10 @@ namespace Teste.Dtos.NotaFiscalDtos
         public int Status { get; set; }
         public string Motivo { get; set; }
         public Guid ClienteId { get; set; }
-        public string ClienteNome { get; set; }
+
+        public void Validate()
+        {
+            
+        }
     }
 }

@@ -1,4 +1,4 @@
-namespace Teste.Wrappers
+namespace Teste.HttpResponses
 {
     public class BasicResponse<T> : IResponse
     {

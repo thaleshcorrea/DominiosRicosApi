@@ -1,7 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Teste.Dtos.ClienteDtos;
-using Teste.Services.ClienteServices;
+using Teste.Services.Contracts;
 
 namespace Teste.Controllers
 {
@@ -10,8 +11,10 @@ namespace Teste.Controllers
     public class ClienteController : ControllerBase
     {
         private readonly IClienteService _clienteService;
-        public ClienteController(IClienteService clienteService)
+        private readonly INotaFiscalService _notaFiscalService;
+        public ClienteController(IClienteService clienteService, INotaFiscalService notaFiscalService)
         {
+            _notaFiscalService = notaFiscalService;
             _clienteService = clienteService;
         }
 
@@ -19,6 +22,22 @@ namespace Teste.Controllers
         public async Task<IActionResult> Get()
         {
             var response = await _clienteService.Get();
+            return StatusCode(response.StatusCode, response);
+        }
+
+        [HttpGet]
+        [Route("{clienteId}")]
+        public async Task<IActionResult> GetById(Guid clienteId)
+        {
+            var response = await _clienteService.GetById(clienteId);
+            return StatusCode(response.StatusCode, response);
+        }
+
+        [HttpGet]
+        [Route("{clienteId}/notas_fiscais")]
+        public async Task<IActionResult> GetNotaFiscalByCliente(Guid clienteId)
+        {
+            var response = await _clienteService.GetNotasFiscais(clienteId);
             return StatusCode(response.StatusCode, response);
         }
 
@@ -37,7 +56,7 @@ namespace Teste.Controllers
             {
                 return StatusCode(response.StatusCode, response);
             }
-            else 
+            else
             {
                 return StatusCode(response.StatusCode);
             }

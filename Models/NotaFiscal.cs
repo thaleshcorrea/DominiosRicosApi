@@ -14,7 +14,7 @@ namespace Teste.Models
             DateTime dataEmissao,
             int status,
             string motivo,
-            Cliente cliente)
+            Guid clienteId)
         {
             Numero = numero;
             Serie = serie;
@@ -22,7 +22,7 @@ namespace Teste.Models
             DataEmissao = dataEmissao;
             Status = status;
             Motivo = motivo;
-            Cliente = cliente;
+            ClienteId = clienteId;
         }
 
         public int Numero { get; private set; }
@@ -33,5 +33,20 @@ namespace Teste.Models
         public string Motivo { get; set; }
         public Guid ClienteId { get; private set; }
         public Cliente Cliente { get; set; }
+
+        public void UpdateDataEmissao(DateTime dataEmissao)
+        {
+            DataEmissao = dataEmissao;
+        }
+
+        public void UpdateStatus(int status)
+        {
+            Status = status;
+        }
+
+        public void UpdateMotivo(string motivo)
+        {
+            Motivo = motivo;
+        }
     }
 }

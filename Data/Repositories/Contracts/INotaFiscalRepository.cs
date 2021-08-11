@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Teste.Dtos.NotaFiscalDtos;
 using Teste.Models;
 
-namespace Teste.Repositories.NotaFiscalRepositories
+namespace Teste.Data.Repositories.Contracts
 {
     public interface INotaFiscalRepository
     {
-        Task<bool> CheckIfExists(int modelo, int serie, int numero);
-        Task<IEnumerable<NotaFiscal>> Get();
+        Task<IEnumerable<GetNotaFiscalDto>> GetByCliente(Guid clienteId);
+        Task<NotaFiscal> Get(Guid clinteId, int modelo, int serie, int numero);
         void Add(NotaFiscal notaFiscal);
         void Update(NotaFiscal notaFiscal);
-        void Delete(Guid Id);
     }
 }

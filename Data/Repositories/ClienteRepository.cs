@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Teste.Data.Context;
+using Teste.Data.Repositories.Contracts;
 using Teste.Dtos.ClienteDtos;
+using Teste.Dtos.NotaFiscalDtos;
 using Teste.Models;
 
-namespace Teste.Repositories.ClienteRepositories
+namespace Teste.Data.Repositories
 {
     public class ClienteRepository : IClienteRepository
     {
@@ -35,7 +37,8 @@ namespace Teste.Repositories.ClienteRepositories
         public async Task<IEnumerable<GetClienteDto>> Get()
         {
             return await _context.Clientes.AsNoTracking()
-                .Select(x => new GetClienteDto{
+                .Select(x => new GetClienteDto
+                {
                     Id = x.Id,
                     Nome = x.Nome,
                     Documento = x.Documento.Numero,
@@ -48,6 +51,29 @@ namespace Teste.Repositories.ClienteRepositories
         {
             return await _context.Clientes.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<GetClienteNotasFiscaisDto> GetNotasFiscais(Guid clienteId)
+        {
+            return await _context.Clientes.AsNoTracking()
+                .Where(x => x.Id == clienteId)
+                .Select(x => new GetClienteNotasFiscaisDto
+                {
+                    Id = x.Id,
+                    Documento = x.Documento.Numero,
+                    Email = x.Email.Endereco,
+                    Nome = x.Nome,
+                    NotasFiscais = x.NotasFiscais.Select(nota => new GetNotaFiscalDto
+                    {
+                        Id = nota.Id,
+                        Modelo = nota.Modelo,
+                        Serie = nota.Serie,
+                        Numero = nota.Numero,
+                        DataEmissao = nota.DataEmissao,
+                        Status = nota.Status,
+                        Motivo = nota.Motivo,
+                    }).ToList()
+                }).FirstOrDefaultAsync();
         }
 
         public void Update(Cliente cliente)

@@ -1,17 +1,25 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Teste.Dtos.NFE_notaDtos;
-using Teste.Services.NotaFiscalServices;
+using Teste.Dtos.NotaFiscalDtos;
+using Teste.Services.Contracts;
 
 namespace Teste.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/notas_fiscais")]
     public class NotaFiscalController : ControllerBase
     {
         private readonly INotaFiscalService _notaFiscalService;
         public NotaFiscalController(INotaFiscalService notaFiscalService)
         {
             _notaFiscalService = notaFiscalService;
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Save(SaveNotaFiscalDto saveNotaFiscalDto)
+        {
+            var response = await _notaFiscalService.Save(saveNotaFiscalDto);
+            return StatusCode(response.StatusCode, response);
         }
     }
 }

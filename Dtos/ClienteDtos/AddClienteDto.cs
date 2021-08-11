@@ -1,9 +1,10 @@
 using Flunt.Notifications;
 using Flunt.Validations;
+using Teste.Shared;
 
 namespace Teste.Dtos.ClienteDtos
 {
-    public class AddClienteDto : Notifiable<Notification>, IDtoBase
+    public class AddClienteDto : Notifiable<Notification>, IValidatable
     {
         public string Nome { get; set; }
         public string Documento { get; set; }
