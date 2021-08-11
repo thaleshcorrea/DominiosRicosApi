@@ -8,7 +8,7 @@ namespace Teste.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<NotaFiscal> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id);
             builder.Property(x => x.Modelo)
                 .IsRequired();
             builder.Property(x => x.Serie)

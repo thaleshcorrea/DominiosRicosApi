@@ -8,13 +8,31 @@ namespace Teste.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Cliente> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id);
             builder.Property(x => x.Nome)
                 .HasMaxLength(100)
                 .IsRequired();
-            builder.Property(x => x.CpfCnpj)
-                .HasMaxLength(20)
-                .IsRequired();
+            builder.OwnsOne(x => x.Documento,
+                doc => {
+                    doc.Property(p => p.Numero)
+                        .HasMaxLength(20)
+                        .HasColumnName("Documento")
+                        .IsRequired();
+                    doc.Property(p => p.Tipo)
+                        .HasColumnName("TipoDocumento")
+                        .IsRequired();
+                    doc.Ignore(p => p.Notifications);
+                    doc.Ignore(p => p.IsValid);
+                });
+            builder.OwnsOne(x => x.Email,
+                email => {
+                    email.Property(p => p.Endereco)
+                        .HasMaxLength(160)
+                        .HasColumnName("Email")
+                        .IsRequired();
+                    email.Ignore(p => p.Notifications);
+                    email.Ignore(p => p.IsValid);
+                });            
         }
     }
 }

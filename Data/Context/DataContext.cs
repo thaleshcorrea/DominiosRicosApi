@@ -8,11 +8,11 @@ namespace Teste.Data.Context
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-            
+
         }
-        
-        DbSet<Cliente> Clientes { get;set; }
-        DbSet<NotaFiscal> NotasFiscais { get; set; }
+
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<NotaFiscal> NotasFiscais { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
